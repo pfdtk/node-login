@@ -22,6 +22,7 @@ export default class AuthCodeGrant implements AuthGrant {
         return true;
     }
 
+    /** @todo get client info from db. */
     public async getClientEntity(clientId: string): Promise<ClientEntity> {
         return {
             id: clientId,
