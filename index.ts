@@ -7,7 +7,7 @@ const r = new Router();
 
 r.get('/authorize', async (ctx, next) => {
     let controller = new Authorize(ctx);
-    ctx.body = controller.index();
+    ctx.body = await controller.index();
     await next();
 });
 

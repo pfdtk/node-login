@@ -14,9 +14,10 @@ export default class Oauth2 {
         this.ctx = ctx;
     }
 
-    public validateAuthorizationRequest(): boolean {
+    public async validateAuthorizationRequest(): Promise<boolean> {
         for (let value of this.enabledGrantTypes()) {
-            if (value.grant.validateAuthorizationRequest(this.ctx) === true) {
+            let isValidRequest = await value.grant.validateAuthorizationRequest(this.ctx);
+            if (isValidRequest === true) {
                 return true;
             }
         }
