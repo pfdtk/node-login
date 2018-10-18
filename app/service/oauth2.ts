@@ -1,5 +1,32 @@
+import * as Router from 'koa-router';
+import AuthCodeGrant from './oauth2/grant/authCodeGrant';
+import AuthGrant from './oauth2/grant/authGrant';
+
+interface GrantType {
+    type: string,
+    grant: AuthGrant
+}
+
 export default class Oauth2 {
+    public ctx: Router.IRouterContext;
+
+    constructor(ctx: Router.IRouterContext) {
+        this.ctx = ctx;
+    }
+
     public validateAuthorizationRequest(): boolean {
-        return true;
+        for (let value of this.enabledGrantTypes()) {
+            if (value.grant.validateAuthorizationRequest(this.ctx) === true) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected enabledGrantTypes(): Array<GrantType> {
+        return [{
+            'type': 'authorization_code',
+            'grant': new AuthCodeGrant()
+        }];
     }
 }
