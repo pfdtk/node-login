@@ -1,6 +1,7 @@
 import * as Router from 'koa-router';
 import AuthGrant from './authGrant';
 import ClientEntity from '../../../entity/client';
+import {default as ClientRepository} from '../../../repository/client';
 
 export default class AuthCodeGrant implements AuthGrant {
     /**
@@ -22,14 +23,9 @@ export default class AuthCodeGrant implements AuthGrant {
         return true;
     }
 
-    /** @todo get client info from db. */
     public async getClientEntity(clientId: string): Promise<ClientEntity> {
-        return {
-            id: clientId,
-            secret: 'abc',
-            name: 'name',
-            redirectUri: 'http://test.jhj.com/login/default/oauth2'
-        };
+        let repository = new ClientRepository();
+        return await repository.getClient(clientId);
     }
 
 }
