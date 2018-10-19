@@ -8,33 +8,35 @@ interface CredentialsInfo {
 }
 
 export default class Authorize extends Controller {
-    public async index(): Promise<string> {
+    public async index(): Promise<void> {
         let oauth2Service = new Oauth2(this.ctx);
         let isValidRequest = await oauth2Service.validateAuthorizationRequest();
         if (isValidRequest) {
-            return `login form`;
+            let userService = new User();
+            if (!userService.isLogin()) {
+                return this.responseBody(`login form`);
+            }
+            return this.responseBody(`confirm form`);
         }
-        return `error: invalid client`;
+        return this.responseBody(`invalid client`);
     }
 
-    public async login(): Promise<Object> {
+    public async login(): Promise<void> {
         let oauth2Service = new Oauth2(this.ctx);
         let isValidRequest = await oauth2Service.validateAuthorizationRequest();
         if (!isValidRequest) {
-            return { status: false, msg: 'invalid client' };
+            return this.responseJsonBody({ status: false, msg: 'invalid client' });
         }
         let post = <CredentialsInfo>this.ctx.request.body;
-        let username = post.username;
-        let password = post.password;
         let userService = new User();
-        let user = await userService.getUserIdentity(username, password);
+        let user = await userService.getUserIdentity(post.username, post.password);
         if (!user.id) {
-            return { status: false, msg: 'invalid credentials' };
+            return this.responseJsonBody({ status: false, msg: 'invalid credentials' });
         }
         let isLogin = userService.login(user);
         if (!isLogin) {
-            return { status: false, msg: 'system error' };
+            return this.responseJsonBody({ status: false, msg: 'system error' });
         }
-        return { status: true, msg: 'success' };
+        return this.responseJsonBody({ status: true, msg: 'success' });
     }
 }

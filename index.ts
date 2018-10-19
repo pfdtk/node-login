@@ -9,15 +9,14 @@ const r = new Router();
 // login page
 r.get('/authorize', async (ctx, next) => {
     let controller = new Authorize(ctx);
-    ctx.body = await controller.index();
+    await controller.index();
     await next();
 });
 
 // login check
 r.post('/authorize', async (ctx, next) => {
     let controller = new Authorize(ctx);
-    ctx.body = await controller.login();
-    ctx.response.type = 'application/json';
+    await controller.login();
     await next();
 });
 

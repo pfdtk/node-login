@@ -11,4 +11,8 @@ export default class User {
     public login(user: UserEntity): boolean {
         return true;
     }
+
+    public isLogin(): boolean {
+        return false;
+    }
 }
