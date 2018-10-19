@@ -2,7 +2,6 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import Authorize from './app/controller/authorize';
 import bodyParser from 'koa-bodyparser';
-// import * as lodash from 'lodash';
 
 const app = new Koa();
 const r = new Router();
